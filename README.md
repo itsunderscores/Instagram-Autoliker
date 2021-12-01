@@ -2,7 +2,7 @@
 
 Likes images automatically based on the hashtag you want.
 
-This functions off of selenium, make sure you have the neccessary packages installed.
+Selenium is required. Uses geckodriver so make sure it's installed correctly.
 
 ## Installation
 ```sh
