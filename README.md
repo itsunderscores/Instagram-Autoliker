@@ -11,6 +11,7 @@ https://github.com/mozilla/geckodriver/releases/download/v0.30.0/geckodriver-v0.
 ## Installation
 ```sh
 git clone https://github.com/itsunderscores/Instagram-Autoliker
-pip install requirements.txt
+cd Instagram-Autoliker
+pip install -r requirements.txt
 python instagram.py
 ```
