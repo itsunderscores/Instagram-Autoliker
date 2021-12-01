@@ -39,16 +39,16 @@ WHITE   = '\033[37m'
 RESET   = '\033[39m'
 
 global syn
-syn = "[USERNAME] [PASSWORD] [POSTS TO LIKE *OPTIONAL*] [WILL LIKE TOP POSTS ON TAG (TRUE/FALSE)] [HASHTAG]\nEXAMPLE: username password 100 false c7"
-print(CRED+'''
-    _  _   _ _       _    _ _       
-   /_\| | | | |_ ___| |  (_) |_____ 
-  / _ \ |_| |  _/ _ \ |__| | / / -_)
- /_/ \_\___/ \__\___/____|_|_\_\___| v1
-''')
-print(CRED+"[+] Autoliker for Instagram by #Tag")
-print(CRED+"[-] Developed by underscores#0001")
-print(WHITE+"-------------------------------------------------------"+YELLOW)
+def header():
+	print(CRED+'''
+	    _  _   _ _       _    _ _       
+	   /_\| | | | |_ ___| |  (_) |_____ 
+	  / _ \ |_| |  _/ _ \ |__| | / / -_)
+	 /_/ \_\___/ \__\___/____|_|_\_\___| v1
+	''')
+	print(CRED+"[+] Autoliker for Instagram by #Tag")
+	print(CRED+"[-] Developed by underscores#0001")
+	print(WHITE+"-------------------------------------------------------"+YELLOW)
 
 firefoxOptions = Options()
 #firefoxOptions.add_argument("-headless")
@@ -57,6 +57,8 @@ browser = webdriver.Firefox(executable_path="C:\\xampp\\htdocs\\geckodriver.exe"
 
 def login():
 	try:
+		header()
+		
 		username = input("[+] Enter username: ")
 		password = getpass.getpass('[-] Enter password (Hidden): ')
 		print("")
