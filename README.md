@@ -2,6 +2,8 @@
 
 Likes images automatically based on the hashtag you want.
 
+I've only tested this on Windows, so it may display weird on Linux.
+
 ## Selenium Driver
 ```
 https://github.com/mozilla/geckodriver/releases/download/v0.30.0/geckodriver-v0.30.0-linux64.tar.gz.asc
