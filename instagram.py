@@ -95,14 +95,14 @@ def login():
 					login()
 				else:
 					if "Please wait a few minutes before you try again." in ele.text:
-						print(CRED + "[-] Rate limited, delaying 3 minutes and trying again!")
+						print(CRED + "[-] Rate limited, delaying 3 minutes and then please try again!")
 						time.sleep(200)
 						os.system("cls")
 						login()
 					else:
 						if "We couldn't connect to Instagram. Make sure you're connected to the internet and try again." in ele.text:
-							print(CRED + "[-] Instagram returned 'Could Not Connect' message, please try again!")
-							time.sleep(5)
+							print(CRED + "[-] Instagram returned 'Could Not Connect' message,  delaying 1 minute and then please try again!")
+							time.sleep(60)
 							os.system("cls")
 							login()
 						else:
