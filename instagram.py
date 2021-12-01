@@ -58,7 +58,7 @@ browser = webdriver.Firefox(executable_path="C:\\xampp\\htdocs\\geckodriver.exe"
 def login():
 	try:
 		header()
-		
+
 		username = input("[+] Enter username: ")
 		password = getpass.getpass('[-] Enter password (Hidden): ')
 		print("")
@@ -74,6 +74,7 @@ def login():
 		passw = browser.find_element_by_name("password")
 		passw.send_keys(password)
 		time.sleep(2)
+
 
 		log_c1 = browser.find_element_by_xpath("/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[3]/button/div")
 		log_c1.click()
@@ -99,15 +100,21 @@ def login():
 						os.system("cls")
 						login()
 					else:
-						pass
+						if "We couldn't connect to Instagram. Make sure you're connected to the internet and try again." in ele.text:
+							print(CRED + "[-] Instagram returned 'Could Not Connect' message, please try again!")
+							time.sleep(5)
+							os.system("cls")
+							login()
+						else:
+							pass
 		except Exception as e:
 			pass
 
-		time.sleep(10)
-		browser.get("https://www.instagram.com/explore/tags/c7/")
-		print(CGREEN + "[-] Signed in!")
-		time.sleep(2)
+		print(CGREEN + "[-] Signed in!" + YELLOW)
 		print("")
+		hashtag = input("[+] Enter hashtag: ")
+		browser.get("https://www.instagram.com/explore/tags/" + hashtag + "/")
+		time.sleep(2)
 		print(YELLOW + "[+] Loading Images... Please wait.")
 		print("")
 		try:
