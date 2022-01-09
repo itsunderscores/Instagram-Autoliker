@@ -46,21 +46,31 @@ def header():
 	  / _ \ |_| |  _/ _ \ |__| | / / -_)
 	 /_/ \_\___/ \__\___/____|_|_\_\___| v1
 	''')
-	print(CRED+"[+] Autoliker for Instagram by #Tag")
+	print(CRED+"[+] Autoliker based on hashtags for Instagram")
 	print(CRED+"[-] Developed by underscores#0001")
 	print(WHITE+"-------------------------------------------------------"+YELLOW)
 
 firefoxOptions = Options()
-firefoxOptions.add_argument("-headless")
+#firefoxOptions.add_argument("-headless")
 #firefoxOptions.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:94.0) Gecko/20100101 Firefox/94.0")
 browser = webdriver.Firefox(executable_path="C:\\xampp\\htdocs\\geckodriver.exe", options=firefoxOptions)
 
+def save_cookie(driver):
+    with open("cookie", 'wb') as filehandler:
+        pickle.dump(driver.get_cookies(), filehandler)
+
+def load_cookie(driver):
+     with open("cookie", 'rb') as cookiesfile:
+         cookies = pickle.load(cookiesfile)
+         for cookie in cookies:
+             #print(cookie)
+             driver.add_cookie(cookie)
+
 def login():
 	try:
-		header()
-
 		username = input("[+] Enter username: ")
-		password = getpass.getpass('[-] Enter password (Hidden): ')
+		#password = getpass.getpass('[-] Enter password (Hidden): ')
+		password = input('[-] Enter password (Hidden): ')
 		print("")
 		print(CGREEN+"[+] Signing in..."+WHITE)
 
@@ -106,45 +116,123 @@ def login():
 							os.system("cls")
 							login()
 						else:
-							pass
+							return "Y"
 		except Exception as e:
-			pass
+			return "Y"
+	except:
+		print(CRED + "[?] Something unexpected happened...")
 
-		print(CGREEN + "[-] Signed in!" + YELLOW)
-		print("")
-		hashtag = input("[+] Enter hashtag: ")
+#def nextpage():
+
+def like(hashtag, skip, times):
+	try:
 		browser.get("https://www.instagram.com/explore/tags/" + hashtag + "/")
 		time.sleep(2)
 		print(YELLOW + "[+] Loading Images... Please wait.")
 		print("")
-		try:
-			clickpicture = browser.find_element_by_xpath("/html/body/div[1]/section/main/article/div[1]/div/div/div[1]/div[1]") #Clicks first picture
-			clickpicture.click()
-			time.sleep(3)
-			skip1 = browser.find_element_by_xpath("/html/body/div[6]/div[1]/div/div/div/button").click() #Skips first picture
-			time.sleep(1)
-			for x in range(8): #Skipping next 8 pictures
-				skip2 = browser.find_element_by_xpath("/html/body/div[6]/div[1]/div/div/div[2]/button").click() #Skips the rest of the top posts
-				time.sleep(1)
-			while 1:
-				try:
-					like = browser.find_element_by_xpath("/html/body/div[6]/div[2]/div/article/div/div[2]/div/div/div[2]/section[1]/span[1]/button").click() #Click Like
-					print(CGREEN + "[+] Like sent!")
-					time.sleep(1)
-					nextpage = browser.find_element_by_xpath("/html/body/div[6]/div[1]/div/div/div[2]/button").click() #Next Page
-					time.sleep(random.randint(10,30)) #Sleeping for 10-30 seconds each picture
-				except Exception as e:
-					print(CRED+"[!] Could not locate, trying again in 30 seconds...")
-					time.sleep(30)
-		except Exception as e:
-			print(CRED + "[!] Could not locate 2, trying again in 30 seconds...")
-			time.sleep(30)
-			browser.close()
-
+	except Exception as e:
+		print(CRED + "[!] Could not load page correctly, trying again in 30 seconds...")
+		time.sleep(30)
 		browser.close()
-	except:
-		print(CRED + "[?] Something unexpected happened...")
+	
+	try:
+		clickpicture = browser.find_element_by_xpath("/html/body/div[1]/section/main/article/div[1]/div/div/div[1]/div[1]") #Clicks first picture
+		clickpicture.click()
+		time.sleep(1)
 
-login()
+		skip1 = browser.find_element_by_xpath("/html/body/div[6]/div[1]/div/div/div/button").click() #Skips first picture
+		time.sleep(1)
+	except:
+		print(CRED + "[!] Could not grab the first image, reload script")
+
+	# Skips first 8 images
+	if skip == "1":
+		skip1 = browser.find_element_by_xpath("/html/body/div[6]/div[1]/div/div/div/button").click() #Skips first picture
+		time.sleep(1)
+		for x in range(8): #Skipping next 8 pictures
+			skip2 = browser.find_element_by_xpath("/html/body/div[6]/div[1]/div/div/div[2]/button").click() #Skips the rest of the top posts
+			time.sleep(1)
+	else:
+		pass
+
+	likessent = 1
+
+	while True:
+
+		if likessent >= times:
+			print("[-] Using new hashtag")
+			break
+		else:
+			pass
+
+		continuelike = False
+		try:
+			alreadyliked = browser.find_element_by_css_selector(".fr66n > button:nth-child(1) > div:nth-child(1) > span:nth-child(1) > svg:nth-child(1)").get_attribute("aria-label")
+			liked = alreadyliked
+		except:
+			pass
+
+		try:
+			alreadyliked = browser.find_element_by_css_selector(".fr66n > button:nth-child(1) > div:nth-child(1) > svg:nth-child(1)").get_attribute("aria-label")
+			liked = alreadyliked
+		except:
+			pass
+
+		if "Unlike" in liked:
+			print(CRED+ "[-] Already liked, skipping")
+			nextpage = browser.find_element_by_xpath("/html/body/div[6]/div[1]/div/div/div[2]/button").click() #Next Page
+			time.sleep(1)
+		else:
+			continuelike = True
+
+		if continuelike == True:
+			try:
+				like = browser.find_element_by_xpath("/html/body/div[6]/div[2]/div/article/div/div[2]/div/div/div[2]/section[1]/span[1]/button").click() #Click Like
+				time.sleep(1)
+				
+				try:
+					nextpage = browser.find_element_by_xpath("/html/body/div[6]/div[1]/div/div/div[2]/button/div").click() #Next Page
+				except:
+					pass
+				
+				try:
+					nextpage = browser.find_element_by_xpath("/html/body/div[6]/div[1]/div/div/div[2]/button").click() #Next Page
+				except:
+					pass
+
+				randomnumber = random.randint(10,30)
+				print(CGREEN + "[-] Like sent (" + str(likessent) + "/" + str(times) + ") | Delay: " + str(randomnumber) + " sec")
+				likessent += 1
+				time.sleep(randomnumber) #Sleeping for 10-30 seconds each picture
+			except Exception as e:
+				print(CRED + "[!] Issue with liking the post/going to next page: " + str(e))
+				time.sleep(30)
+		else:
+			pass
+
+def main():
+	header()
+	prompt = input("[+] Login? Y/N: ")
+	prompt = "n"
+	if prompt == "Y" or prompt == "y":
+		loginstatus = login()
+		if loginstatus == "Y":
+			print(CGREEN + "[-] Login successful!\n")
+			save_cookie(browser)
+			pass
+		else:
+			print(CRED + "[-] Login failed. Relaunch program")
+	else:
+		pass
+
+	browser.get("https://www.instagram.com/")
+	load_cookie(browser)
+	hashtag = input(CGREEN + "[+] Enter hashtag: ")
+	times = input(CGREEN + "[+] Likes per hashtag: ")
+	#hashtag = "c7"
+	#times = 30
+	like(hashtag, "0", int(times))
+
+main()
 
 browser.quit()
