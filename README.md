@@ -6,9 +6,11 @@ Last Update: **01/08/2022**<br>
 Likes images automatically based on the hashtag you want.<br>
 I've only tested this on Windows, so it may display weird on Linux. I dunno.
 
-If it is your first time using the program, you must select "Y" when it asks you to login. Once you have done this, you do not have to do this as it will reuse the cookies.
+<hr>
 
-You must place the Selenium Driver in the same folder as the program. You must also set the driver in the script.
+• If it is your first time using the program, you must select "Y" when it asks you to login. Once you have done this, you do not have to do this as it will reuse the cookies.
+
+• You must place the Selenium Driver in the same folder as the program. You must also set the driver in the script.
 ```
 browser = webdriver.Firefox(executable_path="C:\\xampp\\htdocs\\geckodriver.exe", options=firefoxOptions)
 ```
